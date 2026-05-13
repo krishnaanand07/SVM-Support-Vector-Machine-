@@ -1,61 +1,48 @@
 import streamlit as st
 import pickle
 import numpy as np
+import pandas as pd
 
 # Load model
 data = pickle.load(open("svm_model.pkl", "rb"))
 
 model = data["model"]
 
-# Title
 st.title("Customer Churn Prediction using SVM")
 
-st.write("Enter customer details below")
+# Inputs
+age = st.number_input("Age")
 
-# Input fields
-age = st.number_input("Age", min_value=1)
-
-monthly_income = st.number_input("Monthly Income", min_value=0.0)
+monthly_income = st.number_input("Monthly Income")
 
 subscription_length = st.number_input(
-    "Subscription Length Months",
-    min_value=0
+    "Subscription Length Months"
 )
 
-monthly_bill = st.number_input("Monthly Bill", min_value=0.0)
+monthly_bill = st.number_input("Monthly Bill")
 
-support_tickets = st.number_input("Support Tickets", min_value=0)
+support_tickets = st.number_input("Support Tickets")
 
-internet_usage = st.number_input(
-    "Internet Usage GB",
-    min_value=0.0
-)
+internet_usage = st.number_input("Internet Usage GB")
 
-last_login = st.number_input(
-    "Last Login Days Ago",
-    min_value=0
-)
+last_login = st.number_input("Last Login Days Ago")
 
-satisfaction_score = st.number_input(
-    "Satisfaction Score",
-    min_value=0.0
-)
+satisfaction_score = st.number_input("Satisfaction Score")
 
-# Predict button
 if st.button("Predict"):
 
-    input_data = np.array([[
-        age,
-        monthly_income,
-        subscription_length,
-        monthly_bill,
-        support_tickets,
-        internet_usage,
-        last_login,
-        satisfaction_score
-    ]])
+    input_df = pd.DataFrame([{
+        "Age": age,
+        "Monthly_Income": monthly_income,
+        "Subscription_Length_Months": subscription_length,
+        "Monthly_Bill": monthly_bill,
+        "Support_Tickets": support_tickets,
+        "Internet_Usage_GB": internet_usage,
+        "Last_Login_Days_Ago": last_login,
+        "Satisfaction_Score": satisfaction_score
+    }])
 
-    prediction = model.predict(input_data)
+    prediction = model.predict(input_df)
 
     if prediction[0] == 1:
         st.error("Customer Will Churn")
