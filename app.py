@@ -7,89 +7,50 @@ data = pickle.load(open("svm_model.pkl", "rb"))
 
 model = data["model"]
 
-st.title("Customer Churn Prediction")
+# Title
+st.title("Customer Churn Prediction using SVM")
 
-st.write("Enter Customer Details")
+st.write("Enter customer details below")
 
-# Inputs
-age = st.number_input("Age")
+# Input fields
+age = st.number_input("Age", min_value=1)
 
-gender = st.selectbox("Gender", ["Male", "Female"])
+monthly_income = st.number_input("Monthly Income", min_value=0.0)
 
-region = st.selectbox(
-    "Region",
-    ["North", "South", "East", "West"]
+subscription_length = st.number_input(
+    "Subscription Length Months",
+    min_value=0
 )
 
-monthly_income = st.number_input("Monthly Income")
+monthly_bill = st.number_input("Monthly Bill", min_value=0.0)
 
-subscription_length = st.number_input("Subscription Length")
+support_tickets = st.number_input("Support Tickets", min_value=0)
 
-monthly_bill = st.number_input("Monthly Bill")
-
-support_tickets = st.number_input("Support Tickets")
-
-internet_usage = st.number_input("Internet Usage GB")
-
-contract_type = st.selectbox(
-    "Contract Type",
-    ["Monthly", "Yearly"]
+internet_usage = st.number_input(
+    "Internet Usage GB",
+    min_value=0.0
 )
 
-payment_method = st.selectbox(
-    "Payment Method",
-    ["Credit Card", "Debit Card", "UPI", "Cash"]
+last_login = st.number_input(
+    "Last Login Days Ago",
+    min_value=0
 )
 
-multiple_services = st.selectbox(
-    "Has Multiple Services",
-    ["Yes", "No"]
+satisfaction_score = st.number_input(
+    "Satisfaction Score",
+    min_value=0.0
 )
 
-last_login = st.number_input("Last Login Days Ago")
-
-satisfaction_score = st.number_input("Satisfaction Score")
-
-# Encoding manually
-gender = 1 if gender == "Male" else 0
-
-region_map = {
-    "North": 0,
-    "South": 1,
-    "East": 2,
-    "West": 3
-}
-
-region = region_map[region]
-
-contract_type = 1 if contract_type == "Yearly" else 0
-
-payment_map = {
-    "Credit Card": 0,
-    "Debit Card": 1,
-    "UPI": 2,
-    "Cash": 3
-}
-
-payment_method = payment_map[payment_method]
-
-multiple_services = 1 if multiple_services == "Yes" else 0
-
-# Predict
+# Predict button
 if st.button("Predict"):
 
     input_data = np.array([[
         age,
-        gender,
-        region,
         monthly_income,
         subscription_length,
         monthly_bill,
         support_tickets,
         internet_usage,
-        contract_type,
-        payment_method,
-        multiple_services,
         last_login,
         satisfaction_score
     ]])
@@ -98,5 +59,6 @@ if st.button("Predict"):
 
     if prediction[0] == 1:
         st.error("Customer Will Churn")
+
     else:
         st.success("Customer Will Not Churn")
